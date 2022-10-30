@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Modal, Form, Input, message } from "antd";
+import { Modal, Form, Input, message, Button } from "antd";
 import { HideLoading, ReloadData, ShowLoading } from "../../redux/rootSlice";
 import axios from "axios";
 
@@ -11,7 +11,6 @@ function AdminProjects() {
   const [showAddEditModal, setShowAddEditModal] = React.useState(false);
   const [selectedItemForEdit, setSelectedItemForEdit] = React.useState(null);
   const [type, setType] = React.useState("add");
-  const [form] = Form.useForm();
 
   const onFinish = async (values) => {
     try {
@@ -35,7 +34,6 @@ function AdminProjects() {
         dispatch(HideLoading());
         dispatch(ReloadData(true));
         setSelectedItemForEdit(null);
-        form.resetFields();
       } else {
         message.error(response.data.message);
       }
@@ -72,6 +70,7 @@ function AdminProjects() {
         <button
           className="bg-primary px-5 py-2 mb-4 text-fourth"
           onClick={() => {
+            setType("add");
             setSelectedItemForEdit(null);
             setShowAddEditModal(true);
           }}
@@ -87,7 +86,7 @@ function AdminProjects() {
             <img src={project.image} alt="" className="h-60 w-80" />
             <h1>{project.description}</h1>
             <h1>{project.link}</h1>
-            <h1>{project.technologies}</h1>
+            <h1>Technology used: {project.technologies.join(", ")}</h1>
             <div className="flex justify-end gap-2 mt-5 ">
               <button
                 className="bg-tertiary text-fourth px-5 py-2"
@@ -113,23 +112,37 @@ function AdminProjects() {
       </div>
 
       {(type === "add" || selectedItemForEdit) && (
-        <Modal
+        <Modal        
           open={showAddEditModal}
           title={selectedItemForEdit ? "Edit Projects" : "Add Projects"}
-          footer={null}
+          destroyOnClose = {true}
           onCancel={() => {
             setShowAddEditModal(false);
             setSelectedItemForEdit(null);
           }}
+          footer={[
+            <Button
+              key="back"
+              onClick={() => {
+                setShowAddEditModal(false);
+                setSelectedItemForEdit(null);
+              }}
+            >
+              Cancel
+            </Button>,
+            <Button form="myForm" key="submit" htmlType="submit" type="primary">
+              {selectedItemForEdit ? "Update" : "Add"}
+            </Button>,
+          ]}
         >
           <Form
-          form = {form}
+            id="myForm"
             layout="vertical"
             onFinish={onFinish}
             initialValues={{
               ...selectedItemForEdit,
               technologies: selectedItemForEdit?.technologies?.join(", ")
-            } || {}}
+            } || {}}            
           >
             <Form.Item name="title" label="Title">
               <Input placeholder="Enter Title" />
@@ -145,21 +158,7 @@ function AdminProjects() {
             </Form.Item>
             <Form.Item name="technologies" label="Technologies">
               <Input placeholder="Technology used (Seperate by comma(,)" />
-            </Form.Item>
-            <div className="flex justify-end gap-2">
-              <button
-                className="bg-tertiary text-fourth px-5 py-2"
-                onClick={() => {
-                  setShowAddEditModal(false);
-                  setSelectedItemForEdit(null);
-                }}
-              >
-                Cancel
-              </button>
-              <button type="submit" className="bg-primary text-fourth px-5 py-2">
-                {selectedItemForEdit ? "Update" : "Add"}
-              </button>
-            </div>
+            </Form.Item>            
           </Form>
         </Modal>
       )}

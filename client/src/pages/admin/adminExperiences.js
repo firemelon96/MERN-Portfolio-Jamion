@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Modal, Form, Input, message } from "antd";
+import { Modal, Form, Input, message, Button } from "antd";
 import { HideLoading, ReloadData, ShowLoading } from "../../redux/rootSlice";
 import axios from "axios";
 
@@ -63,11 +63,11 @@ function AdminExperiences() {
 
   return (
     <div>
-
       <div className="flex justify-end">
         <button
           className="bg-primary px-5 py-2 mb-4 text-fourth"
           onClick={() => {
+            setType("add");
             setSelectedItemForEdit(null);
             setShowAddEditModal(true);
           }}
@@ -75,7 +75,6 @@ function AdminExperiences() {
           Add Experience
         </button>
       </div>
-
 
       <div className="grid grid-cols-4 sm:grid-cols-1 gap-2">
         {experiences.map((experience) => (
@@ -99,8 +98,8 @@ function AdminExperiences() {
               <button
                 className="bg-primary text-fourth px-5 py-2"
                 onClick={() => {
-                  setSelectedItemForEdit(experience);
                   setShowAddEditModal(true);
+                  setSelectedItemForEdit(experience);
                   setType("edit");
                 }}
               >
@@ -110,19 +109,33 @@ function AdminExperiences() {
           </div>
         ))}
       </div>
-      
 
       {(type === "add" || selectedItemForEdit) && (
         <Modal
           open={showAddEditModal}
           title={selectedItemForEdit ? "Edit Experience" : "Add Experience"}
-          footer={null}
+          destroyOnClose={true}
           onCancel={() => {
             setShowAddEditModal(false);
             setSelectedItemForEdit(null);
-        }}
+          }}
+          footer={[
+            <Button
+              key="back"
+              onClick={() => {
+                setShowAddEditModal(false);
+                setSelectedItemForEdit(null);
+              }}
+            >
+              Cancel
+            </Button>,
+            <Button form="myForm" key="submit" htmlType="submit" type="primary">
+              {selectedItemForEdit ? "Update" : "Add"}
+            </Button>,
+          ]}
         >
           <Form
+            id="myForm"
             layout="vertical"
             onFinish={onFinish}
             initialValues={selectedItemForEdit}
@@ -139,20 +152,6 @@ function AdminExperiences() {
             <Form.Item name="description" label="Description">
               <Input.TextArea placeholder="Description" />
             </Form.Item>
-            <div className="flex justify-end gap-2">
-              <button
-                className="bg-tertiary text-fourth px-5 py-2"
-                onClick={() => {
-                  setShowAddEditModal(false);
-                  setSelectedItemForEdit(null);
-                }}
-              >
-                Cancel
-              </button>
-              <button className="bg-primary text-fourth px-5 py-2">
-                {selectedItemForEdit ? "Update" : "Add"}
-              </button>
-            </div>
           </Form>
         </Modal>
       )}

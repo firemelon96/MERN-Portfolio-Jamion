@@ -32,20 +32,20 @@ function AdminContact() {
         layout="vertical"
         initialValues={portfolioData.contacts}
       >
-        <Form.Item name="name" label="Welcome text">
+        <Form.Item name="name" label="Full name">
           <Input placeholder="Intro" />
         </Form.Item>
-        <Form.Item name="gender" label="First Name">
-          <Input placeholder="Enter your First name" />
+        <Form.Item name="gender" label="Gender">
+          <Input placeholder="Enter your Gender" />
         </Form.Item>
-        <Form.Item name="age" label="Last Name">
-          <Input placeholder="Enter your last name" />
+        <Form.Item name="age" label="Age">
+          <Input placeholder="Enter your age" />
         </Form.Item>
-        <Form.Item name="email" label="Caption">
-          <Input placeholder="Enter a Caption" />
+        <Form.Item name="email" label="Email">
+          <Input placeholder="Enter a email" />
         </Form.Item>
-        <Form.Item name="mobile" label="Description">
-          <Input placeholder="Enter Description" />
+        <Form.Item name="mobile" label="Mobile">
+          <Input placeholder="Enter mobile" />
         </Form.Item>
         <Form.Item name="country" label="Description">
           <Input placeholder="Enter Description" />

@@ -43,7 +43,7 @@ function Projects() {
               {projects[selectedItemIndex].title}
             </h1>
             <p className="text-fourth">
-              {projects[selectedItemIndex].technologies}
+              {projects[selectedItemIndex].technologies.join(", ")}
             </p>
             <p className="text-fourth">
               {projects[selectedItemIndex].description}
