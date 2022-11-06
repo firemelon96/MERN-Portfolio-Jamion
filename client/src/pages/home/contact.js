@@ -9,7 +9,7 @@ function Contact() {
     <div>
       <SectionTitle title="Say Hello" />
       <div className="flex sm:flex-col justify-between items-center bg-secondary">
-        <div className="flex flex-col text-xl text-fourth ml-5">
+        <div className="flex flex-col text-[16px] text-fourth ml-5">
           <p>{"{"}</p>
           {Object.keys(contacts).map(
             (key) =>
