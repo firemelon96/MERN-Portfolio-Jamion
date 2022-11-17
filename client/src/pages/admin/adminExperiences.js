@@ -1,8 +1,13 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Modal, Form, Input, message, Button } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+import { Modal, Form, Input, message, Button, Upload } from "antd";
 import { HideLoading, ReloadData, ShowLoading } from "../../redux/rootSlice";
 import axios from "axios";
+import { storage } from "../../firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+
+// const Upload = require("rc-upload");
 
 function AdminExperiences() {
   const dispatch = useDispatch();
@@ -11,8 +16,27 @@ function AdminExperiences() {
   const [showAddEditModal, setShowAddEditModal] = React.useState(false);
   const [selectedItemForEdit, setSelectedItemForEdit] = React.useState(null);
   const [type, setType] = React.useState("add");
+  const [file, setFile] = React.useState("");
+  const [fileUrl, setFileUrl] = React.useState("");
+
+  const props = {
+    name: "title",
+
+    onChange({ file, fileList, fileUrl }) {
+      setFileUrl(fileUrl);
+    },
+  };
 
   const onFinish = async (values) => {
+    // console.log(values);
+    const imageStorage = ref(storage, `images/${file}`);
+    // console.log(imageStorage);
+    uploadBytes(imageStorage, file).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        setFileUrl((prev) => [...prev, url]);
+        // console.log(first)
+      });
+    });
     try {
       dispatch(ShowLoading());
       let response;
@@ -151,6 +175,11 @@ function AdminExperiences() {
             </Form.Item>
             <Form.Item name="description" label="Description">
               <Input.TextArea placeholder="Description" />
+            </Form.Item>
+            <Form.Item name="title">
+              <Upload {...props}>
+                <Button icon={<UploadOutlined />}>Click to Upload</Button>
+              </Upload>
             </Form.Item>
           </Form>
         </Modal>

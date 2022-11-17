@@ -112,10 +112,10 @@ function AdminProjects() {
       </div>
 
       {(type === "add" || selectedItemForEdit) && (
-        <Modal        
+        <Modal
           open={showAddEditModal}
           title={selectedItemForEdit ? "Edit Projects" : "Add Projects"}
-          destroyOnClose = {true}
+          destroyOnClose={true}
           onCancel={() => {
             setShowAddEditModal(false);
             setSelectedItemForEdit(null);
@@ -139,10 +139,12 @@ function AdminProjects() {
             id="myForm"
             layout="vertical"
             onFinish={onFinish}
-            initialValues={{
-              ...selectedItemForEdit,
-              technologies: selectedItemForEdit?.technologies?.join(", ")
-            } || {}}            
+            initialValues={
+              {
+                ...selectedItemForEdit,
+                technologies: selectedItemForEdit?.technologies?.join(", "),
+              } || {}
+            }
           >
             <Form.Item name="title" label="Title">
               <Input placeholder="Enter Title" />
@@ -151,14 +153,14 @@ function AdminProjects() {
               <Input.TextArea placeholder="Whats the Description" />
             </Form.Item>
             <Form.Item name="image" label="Image link">
-              <Input placeholder="Image link" />
+              <Input placeholder="Image link" defaultValue="img/3.svg" />
             </Form.Item>
             <Form.Item name="link" label="Project link">
               <Input placeholder="Whats the link of the project" />
             </Form.Item>
             <Form.Item name="technologies" label="Technologies">
               <Input placeholder="Technology used (Seperate by comma(,)" />
-            </Form.Item>            
+            </Form.Item>
           </Form>
         </Modal>
       )}
