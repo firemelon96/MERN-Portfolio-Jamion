@@ -22,7 +22,12 @@ function Intro() {
           type=""
           className="border-2 border-tertiary text-tertiary px-10 py-3 rounded"
         >
-          Get Started
+          <a
+            className="text-tertiary"
+            href="mailto:almujahid.ibno.jamion@gmail.com"
+          >
+            Get in touch
+          </a>
         </button>
       </div>
       <div className=" w-[40%] bg-[url('../public/img/estong.png')] bg-contain bg-no-repeat bg-center "></div>

@@ -39,9 +39,15 @@ function Projects() {
             className="h-60 w-72"
           />
           <div className="flex flex-col gap-5">
-            <h1 className="text-tertiary text-2xl">
-              {projects[selectedItemIndex].title}
-            </h1>
+            <a
+              rel="noopener noreferrer"
+              target="_blank"
+              href={projects[selectedItemIndex].link}
+            >
+              <h1 className="text-tertiary text-2xl">
+                {projects[selectedItemIndex].title}
+              </h1>
+            </a>
             <p className="text-fourth">
               {projects[selectedItemIndex].technologies.join(", ")}
             </p>
