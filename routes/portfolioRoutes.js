@@ -1,218 +1,49 @@
-const router = require ('express').Router();
-const {Intro, About, Experience, Project, Contact} = require('../models/portfolioModel');
-const User = require('../models/userModel');
+const router = require("express").Router();
+const {
+  getPortfolioData,
+  updateIntro,
+  updateAbout,
+  addExperience,
+  updateExperience,
+  deleteExperience,
+  addProject,
+  updateProject,
+  deleteProject,
+  updateContact,
+  adminLogin,
+} = require("../controller/portfolioController");
 
 //get all portfolio data
-router.get('/get-portfolio-data', async(req, res)=>{
-    try {
-        const intros = await Intro.find();
-        const abouts = await About.find();
-        const experiences = await Experience.find();
-        const projects = await Project.find();
-        const contacts = await Contact.find();
-
-        res.status(200).send({
-            intro : intros[0],
-            about : abouts[0],
-            experiences : experiences,
-            projects : projects,
-            contacts : contacts[0]
-        });
-    } catch (error) {
-        res.status(500).send(error);
-    }
-});
+router.get("/get-portfolio-data", getPortfolioData);
 
 //update intro
-router.post('/update-intro', async(req, res)=>{
-    try {
-        const intro = await Intro.findOneAndUpdate(
-            {
-                _id: req.body._id
-            },
-            req.body,
-            {
-                new: true
-            }
-        );
-        res.status(200).send({
-            data: intro,
-            success: true,
-            message: "Intro Updated Successfully"
-        });
-    } catch (error) {
-        res.status(500).send(error);
-    }
-});
+router.post("/update-intro", updateIntro);
 
 //update-about
-router.post('/update-about', async (req, res)=>{
-    try {
-        const about = await About.findOneAndUpdate({
-            _id: req.body._id
-        },
-        req.body, {
-            new: true
-        });
-        res.status(200).send({
-            data: about,
-            success: true,
-            message: "About Updated Successfully"
-        });
-    } catch (error) {
-        res.status(500).send(error);
-    }
-});
+router.post("/update-about", updateAbout);
 
 //add experirience
-
-router.post('/add-experience', async (req, res) =>{
-    try {
-        const experience = Experience(req.body);
-        await experience.save();
-        res.status(200).send({
-            data: experience,
-            success: true,
-            message: "Added Experience Successfully"
-        });
-    } catch (error) {
-        console.log(error);
-        res.status(500).send(error);
-    }
-});
+router.post("/add-experience", addExperience);
 
 //update-experience
-router.post('/update-experience', async (req, res)=>{
-    try {
-        const experience = await Experience.findOneAndUpdate({
-            _id: req.body._id
-        },
-        req.body, 
-        {
-            new: true
-        });
-        res.status(200).send({
-            data: experience,
-            success: true,
-            message: "Experience Updated Successfully"
-        });
-    } catch (error) {
-        res.status(500).send(error);
-    }
-});
+router.post("/update-experience", updateExperience);
 
 //delete experience
-
-router.post('/delete-experience', async (req, res)=> {
-    try {
-        const experience = await Experience.findOneAndDelete({
-            _id: req.body._id
-        });
-        res.status(200).send({
-            data: experience,
-            success: true,
-            message: "Deleted data successfully"
-        });
-    } catch (error) {
-        res.status.apply(500).send(error);
-    }
-});
+router.post("/delete-experience", deleteExperience);
 
 //add project
-router.post('/add-project', async (req, res) =>{
-    try {
-        const project = Project(req.body);
-        await project.save();
-        res.status(200).send({
-            data: project,
-            success: true,
-            message: "Added Project Successfully"
-        });
-    } catch (error) {
-        console.log(error);
-        res.status(500).send(error);
-    }
-});
+router.post("/add-project", addProject);
 
 //update-project
-router.post('/update-project', async (req, res)=>{
-    try {
-        const project = await Project.findOneAndUpdate({
-            _id: req.body._id
-        },
-        req.body, 
-        {
-            new: true
-        });
-        res.status(200).send({
-            data: project,
-            success: true,
-            message: "Project Updated Successfully"
-        });
-    } catch (error) {
-        res.status(500).send(error);
-    }
-});
+router.post("/update-project", updateProject);
 
 //delete project
-
-router.post('/delete-project', async (req, res)=> {
-    try {
-        const project = await Project.findOneAndDelete({
-            _id: req.body._id
-        });
-        res.status(200).send({
-            data: project,
-            success: true,
-            message: "Deleted data successfully"
-        });
-    } catch (error) {
-        res.status.apply(500).send(error);
-    }
-});
+router.post("/delete-project", deleteProject);
 
 //update contact
-router.post('/update-contact', async(req, res)=>{
-    try {
-        const contacts = await Contact.findOneAndUpdate(
-            {
-                _id: req.body._id
-            },
-            req.body,
-            {
-                new: true
-            }
-        );
-        res.status(200).send({
-            data: contacts,
-            success: true,
-            message: "Contact Updated Successfully"
-        });
-    } catch (error) {
-        res.status(500).send(error);
-    }
-});
+router.post("/update-contact", updateContact);
 
-router.post('/admin-login', async (req, res)=>{
-    try {
-        const user = await User.findOne({username : req.body.username, password : req.body.password});
-        user.password = "";
-        if (user) {
-            res.status(200).send({
-                data: user,
-                success: true,
-                message: "Login Successfully"
-            });
-        }else {
-            res.status(200).send({
-                data: user,
-                success: false,
-                message: "Invalid Credentials"
-            });
-        }
-    } catch (error) {
-        res.status(500).send(error);
-    }
-});
+//Admin login
+router.post("/admin-login", adminLogin);
 
 module.exports = router;

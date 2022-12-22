@@ -1,21 +1,27 @@
 const express = require("express");
-require('dotenv').config();
+require("dotenv").config();
+const cors = require("cors");
 
 const app = express();
-const dbConfig = require('./config/dbConfig');
+const dbConfig = require("./config/dbConfig");
 
-const portfolioRoutes = require('./routes/portfolioRoutes')
+const portfolioRoutes = require("./routes/portfolioRoutes");
 
 app.use(express.json());
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+  })
+);
 
 app.use("/api/portfolio", portfolioRoutes);
 
 const port = process.env.PORT || 5000;
-const path = require('path');
+const path = require("path");
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client/build")));
-  app.get("*", (req,res) => {
+  app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "client/build/index.html"));
   });
 }
